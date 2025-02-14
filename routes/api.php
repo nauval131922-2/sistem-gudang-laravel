@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\LoanController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
 
@@ -36,6 +37,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/item', [ItemController::class, 'store'])->middleware(['ableCreateUpdateItem']);
     Route::patch('/item/{id}', [ItemController::class, 'update'])->middleware(['ableCreateUpdateItem']);
     Route::delete('/item/{id}', [ItemController::class, 'destroy']);
+
+    // loan
+    Route::get('/loan', [LoanController::class, 'index']);
 
     Route::get('/order/{id}/set-as-done', [OrderController::class, 'setAsDone'])->middleware(['ableFinishOrder']);
     Route::get('/order/{id}/payment', [OrderController::class, 'payment'])->middleware(['ablePayOrder']);

@@ -13,7 +13,13 @@ class LoanController extends Controller
      */
     public function index()
     {
-        //
+        $loans = Loan::select('id', 'item_id', 'borrower_name', 'loan_date', 'return_date', 'status')
+            ->with(['item:id,name'])
+            ->get();
+            
+        return response([
+            'data' => $loans
+        ]);
     }
 
     /**

@@ -49,9 +49,12 @@ class LoanController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Loan $loan)
+    public function show($id)
     {
-        //
+        $loan = Loan::find($id);
+        return response([
+            'data' => $loan
+        ]);
     }
 
     /**
@@ -74,8 +77,13 @@ class LoanController extends Controller
         ]);
 
         $loan = Loan::find($id);
+        
         $loan->update($request->all());
 
+        // jika return_date diisi, ubah status menjadi returned
+        if ($request->return_date) {
+            $loan->status = 'returned';
+        }
         return response([
             'data' => $loan
         ]);

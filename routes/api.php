@@ -40,6 +40,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // loan
     Route::get('/loan', [LoanController::class, 'index']);
+    Route::post('/loan', [LoanController::class, 'store']);
+    Route::delete('/loan/{id}', [LoanController::class, 'destroy']);
+    Route::patch('/loan/{id}', [LoanController::class, 'update']);
 
     Route::get('/order/{id}/set-as-done', [OrderController::class, 'setAsDone'])->middleware(['ableFinishOrder']);
     Route::get('/order/{id}/payment', [OrderController::class, 'payment'])->middleware(['ablePayOrder']);

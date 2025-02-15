@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Loan;
-use App\Http\Requests\StoreLoanRequest;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Http\Requests\UpdateLoanRequest;
+use Illuminate\Support\Facades\Storage;
 
 class LoanController extends Controller
 {
@@ -14,9 +16,9 @@ class LoanController extends Controller
     public function index()
     {
         $loans = Loan::select('id', 'item_id', 'borrower_name', 'loan_date', 'return_date', 'status')
-            ->with(['item:id,name'])
+            ->with(['item:id,name,image'])
             ->get();
-            
+
         return response([
             'data' => $loans
         ]);
@@ -33,9 +35,15 @@ class LoanController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreLoanRequest $request)
+    public function store(Request $request)
     {
-        //
+        $request->validate([
+            'item_id' => 'required',
+            'borrower_name' => 'required',
+            'loan_date' => 'required',
+        ]);
+
+        $loan = Loan::create($request->all());
     }
 
     /**
@@ -57,16 +65,32 @@ class LoanController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateLoanRequest $request, Loan $loan)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'item_id' => 'required',
+            'borrower_name' => 'required',
+            'loan_date' => 'required',
+        ]);
+
+        $loan = Loan::find($id);
+        $loan->update($request->all());
+
+        return response([
+            'data' => $loan
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Loan $loan)
+    public function destroy($id)
     {
-        //
+        $loan = Loan::find($id);
+        $loan->delete();
+
+        return response([
+            'data' => $loan
+        ]);
     }
 }
